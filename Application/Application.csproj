@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+
+		<!-- Assembly adı -->
+		<AssemblyName>Application</AssemblyName>
+		<RootNamespace>C__SQL_ADO.NET_Application</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.4" />
+	  <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.2" />
+	  <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="10.0.2" />
+	  <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.2" />
+	  <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Domain\Domain.csproj" />
+	</ItemGroup>
+
+</Project>
