@@ -40,6 +40,7 @@ class EntryMenu
 
                 if (result.Issuccess)
                 {
+
                       UserSession session = new UserSession(result.Value.id, result.Value.name, result.Value.username, result.Value.Role);
                       MainMenu menu = new MainMenu(session);
                      Console.WriteLine(result.Message);
@@ -51,10 +52,13 @@ class EntryMenu
                 else
                 {
                     Console.WriteLine(result.Message);
-                    
-                      
-                }               
+                DeleteHelper.Delete();
+
+
             }
 
+
         }
+
+    }
 }

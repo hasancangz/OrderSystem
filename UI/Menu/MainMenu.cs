@@ -1,19 +1,20 @@
-﻿using System;
-using System.Text;
+﻿using C__SQL_ADO.NET_Application;
+using C__SQL_ADO.NET_Application.DTO;
+using C__SQL_ADO.NET_Application.InterfaceRepor;
+using C__SQL_ADO.NET_Application.Repositories;
+using C__SQL_ADO.NET_Application.Services;
+using C__SQL_ADO.NET_Application.Session;
+using C__SQL_ADO.NET_Domain.Domain;
+using C__SQL_ADO.NET_Domain.DomainRule;
+using C__SQL_ADO.NET_UI.GeneralProcess;
+using C__SQL_ADO.NET_UI.Interface;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
-using C__SQL_ADO.NET_Application;
-using C__SQL_ADO.NET_Application.Services;
-using C__SQL_ADO.NET_Domain.Domain;
-using C__SQL_ADO.NET_Application.InterfaceRepor;
-using C__SQL_ADO.NET_Application.Repositories;
-using C__SQL_ADO.NET_Application.DTO;
-using C__SQL_ADO.NET_Application.Session;
-using C__SQL_ADO.NET_Domain.DomainRule;
-using C__SQL_ADO.NET_UI.Interface;
-using C__SQL_ADO.NET_UI.GeneralProcess;
+using static System.Collections.Specialized.BitVector32;
 
 namespace C__SQL_ADO.NET_UI.Menu
 {
@@ -34,32 +35,51 @@ namespace C__SQL_ADO.NET_UI.Menu
     public class MainMenu
     {
 
-        Dictionary<User.Role, Func<Imenu>> RoleMenu = new Dictionary<User.Role, Func<Imenu>>();
+        Dictionary<User.Role, Func<BaseMenu>> RoleMenu;
 
         public UserSession Session { get; }
         public MainMenu(UserSession session)
         {
             this.Session = session;
-        Dictionary<User.Role, Func<Imenu>> RoleMenu = new Dictionary<User.Role, Func<Imenu>>()
-        {
 
-            { User.Role.Customer,()=>new CustomerMenu(session)},
-            {User.Role.Manager,()=>new ManagerMenu(session)},
 
-        };
+            RoleMenu = new Dictionary<User.Role, Func<BaseMenu>>()
+          {
 
-            this.RoleMenu = RoleMenu;
+            { User.Role.Customer,()=>
+                {
+
+                CustomerRepositorySql customerRepositorySql = new CustomerRepositorySql();
+                OrderService orderService=new OrderService(new OrderRepositorySql());
+                CustomerService customerService=new CustomerService(customerRepositorySql,customerRepositorySql);
+
+                return new CustomerMenu(session,customerRepositorySql,orderService,customerService); }
+                },
+
+            { User.Role.Manager,() =>
+                {
+                ManagerRepositorySql managerRepositorySql = new ManagerRepositorySql();
+                ManagerService managerService = new ManagerService(managerRepositorySql,managerRepositorySql);
+                OrderService orderService = new OrderService(new OrderRepositorySql());
+                HelperStock helperStock=new HelperStock(orderService,managerService);
+
+                return new ManagerMenu(session, managerRepositorySql, orderService, managerService, helperStock);
+                }
+
+            }
+          };
+
         }
 
         public ActionStatus ShowMenu()
         {
             if (RoleMenu.TryGetValue(Session.Role, out var menu))
             {
-                return menu().PrivateMenu(Session);
+                return menu().baseMenu();
             }
             return ActionStatus.Exit;
         }
 
-      
     }
+
 }

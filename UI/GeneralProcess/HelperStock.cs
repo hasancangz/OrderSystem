@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace C__SQL_ADO.NET_UI.GeneralProcess
 {
-    internal class HelperStock
+public class HelperStock
     {
 
         private readonly OrderService orderService;

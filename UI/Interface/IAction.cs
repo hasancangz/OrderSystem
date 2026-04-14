@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace C__SQL_ADO.NET_UI.Interface
 {
-    internal interface IAction
+  public interface IAction
     {
         public ActionStatus Execute();
         
